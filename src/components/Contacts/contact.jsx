@@ -13,7 +13,7 @@ const Contact = () => {
 
   useEffect(() => {
     dispatch(fetchContactsThunk());
-  }, []);
+  }, [dispatch]);
 
   const visibleContacts = () => {
     const normalizedFilter = filter?.toLowerCase();
