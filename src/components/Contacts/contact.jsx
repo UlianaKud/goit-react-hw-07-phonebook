@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector, useDispatch } from 'react-redux';
 import { getContacts } from '../../redux/selectors';
 import { getFilter } from '../../redux/selectors';
-import { deleteContact } from '../../redux/contactsSlice';
+import { deleteContactsThunk, fetchContactsThunk } from 'redux/thunks';
 import scss from './contact.module.scss';
 
 const Contact = () => {
@@ -11,11 +11,14 @@ const Contact = () => {
   const filter = useSelector(getFilter);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(fetchContactsThunk());
+  }, []);
+
   const visibleContacts = () => {
     const normalizedFilter = filter?.toLowerCase();
 
     if (normalizedFilter !== '' && contacts?.length) {
-      console.log('visibleContacts', normalizedFilter, contacts);
       return contacts.filter(contact =>
         contact.name.toLowerCase().includes(normalizedFilter)
       );
@@ -24,17 +27,17 @@ const Contact = () => {
     }
   };
   const onDeleteContact = id => {
-    dispatch(deleteContact(id));
+    dispatch(deleteContactsThunk(id));
   };
 
   return (
     <ul className={scss.contactList}>
-      {visibleContacts()?.map(({ id, name, number }) => {
+      {visibleContacts()?.map(({ id, name, phone }) => {
         return (
-          <li key={`${number}-${name}`} className={scss.contactItem}>
+          <li key={`${phone}-${name}`} className={scss.contactItem}>
             <div className={scss.contactWrapper}>
               <span>{name}:</span>
-              <span className={scss.number}>{number}</span>
+              <span className={scss.number}>{phone}</span>
               <button
                 type="button"
                 className={scss.button}
@@ -50,8 +53,6 @@ const Contact = () => {
   );
 };
 
-export default Contact;
-
 Contact.propTypes = {
   contacts: PropTypes.arrayOf(
     PropTypes.exact({
@@ -61,3 +62,5 @@ Contact.propTypes = {
     })
   ),
 };
+
+export default Contact;

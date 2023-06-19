@@ -1,13 +1,21 @@
-import { addContact } from '../../redux/contactsSlice';
+import { useRef, useEffect } from 'react';
+import { addContactsThunk } from 'redux/thunks';
 import { useDispatch, useSelector } from 'react-redux';
 import { getContacts } from '../../redux/selectors';
 import Notiflix from 'notiflix';
 import { nanoid } from '@reduxjs/toolkit';
 import scss from './form.module.scss';
+import InputMask from 'react-input-mask';
 
 const Form = () => {
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const input = inputRef.current;
+    input.getSelection();
+  }, []);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -22,13 +30,12 @@ const Form = () => {
       Notiflix.Notify.warning(`${normalizedname} is already in contacts`);
       return;
     }
-    console.log(form.elements.name.value);
 
     dispatch(
-      addContact({
+      addContactsThunk({
         id: nanoid(),
         name: form.elements.name.value,
-        number: form.elements.number.value,
+        phone: form.elements.number.value,
       })
     );
     form.reset();
@@ -43,7 +50,7 @@ const Form = () => {
             className={scss.input}
             type="text"
             name="name"
-            placeholder='Name'
+            placeholder="Name"
             pattern="[A-Za-z]{1,32}"
             title="Username must be one word"
             required
@@ -54,14 +61,17 @@ const Form = () => {
       <label htmlFor="number" className={scss.label}>
         <span>Number</span>
         <div className={scss.inputWrapper}>
-          <input
+          <InputMask
             className={scss.input}
             type="tel"
             name="number"
-            placeholder='Number'
+            placeholder="Number"
             pattern="[\+]\d{2}[\(]\d{3}[\)]\d{7}"
+            ref={inputRef}
             title="Phone number must have format +38(050)1234567 and can start with +"
             required
+            mask="+3\8(999)9999999"
+            maskChar=" "
           />
           <span></span>
         </div>
