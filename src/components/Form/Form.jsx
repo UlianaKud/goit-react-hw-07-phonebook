@@ -38,6 +38,7 @@ const Form = () => {
         phone: form.elements.number.value,
       })
     );
+    inputRef.current.setInputValue('');
     form.reset();
   };
 

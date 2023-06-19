@@ -7,16 +7,20 @@ export const fetchContactsThunk = createAsyncThunk('contacts/fetchAll', () => {
   return fetchContacts();
 });
 
-export const addContactsThunk = createAsyncThunk('contacts/addContact', (payload) => {
-    console.log(payload);
+export const addContactsThunk = createAsyncThunk(
+  'contacts/addContact',
+  payload => {
     return addContacts(payload);
-  });
+  }
+);
 
-  export const deleteContactsThunk = createAsyncThunk('contacts/deleteContact', (id, { rejectWithValue }) => {
-    console.log('deleteContactsThunk');
+export const deleteContactsThunk = createAsyncThunk(
+  'contacts/deleteContact',
+  (id, { rejectWithValue }) => {
     try {
-        return deleteContacts(id)
+      return deleteContacts(id);
     } catch (error) {
-        return rejectWithValue(error)
+      return rejectWithValue(error);
     }
-}) 
+  }
+);
