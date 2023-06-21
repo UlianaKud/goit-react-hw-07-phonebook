@@ -7,13 +7,13 @@ import {
 } from './thunks';
 
 const handlePending = state => {
-  state.contacts.isLoading = true;
-  state.contacts.error = '';
+  state.isLoading = true;
+  state.error = '';
 };
 
 const handleRejected = (state, { payload }) => {
-  state.contacts.isLoading = false;
-  state.contacts.error = payload;
+  state.isLoading = false;
+  state.error = payload;
 };
 
 const handleFetchContacts = (state, { payload }) => {
@@ -40,10 +40,10 @@ const contactSlice = createSlice({
       .addCase(addContactsThunk.fulfilled, handleAddContacts)
       .addCase(deleteContactsThunk.fulfilled, handleDeleteContacts)
       .addMatcher(action => {
-        action.type.endsWith('/pending');
+        return action.type.endsWith('/pending');
       }, handlePending)
       .addMatcher(action => {
-        action.type.endsWith('/rejected');
+        return action.type.endsWith('/rejected');
       }, handleRejected);
   },
 });

@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { addContactsThunk } from 'redux/thunks';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from '../../redux/selectors';
+import { selectContacts } from '../../redux/selectors';
 import Notiflix from 'notiflix';
 import { nanoid } from '@reduxjs/toolkit';
 import scss from './form.module.scss';
@@ -9,7 +9,7 @@ import InputMask from 'react-input-mask';
 
 const Form = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
   const inputRef = useRef(null);
 
   useEffect(() => {
